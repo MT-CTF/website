@@ -56,7 +56,7 @@
 	<footer>
 		<ul>
 			<li>
-				<p>&copy; 2022 the CaptureTheFlag Team. </p>
+				<p>&copy; 2018-<span id="currentYear"></span> the CaptureTheFlag Team. </p>
 				<a href="https://github.com/MT-CTF/website">Website Source (MIT)</a>
 			</li>
 			<li>
@@ -66,4 +66,7 @@
 		</ul>
 	</footer>
 </body>
+<script>
+    document.getElementById("currentYear").innerHTML = new Date().getFullYear();
+</script>
 </html>

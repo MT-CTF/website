@@ -32,6 +32,7 @@ h1,
 h2,
 h3 {
 	color: var(--header-color);
+	text-align: center;
 }
 
 a {
@@ -43,8 +44,8 @@ a:hover {
 
 code {
 	background-color: #00000055;
-	padding: 6px;
-	border-radius: 6px;
+	padding: 2px 6px;
+	border-radius: 3px;
 }
 
 header {
@@ -57,13 +58,13 @@ header a {
 
 header img {
 	filter: brightness(1.2);
-	height: 100%;
-	width: 100%;
-}
-
-body > h1 {
-	text-align: center;
-	text-shadow: var(--background-color) 2px 2px 4px;
+	display:block;
+	width: 60%;
+	min-width: 400px;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top: 4vh;
+	margin-bottom: 6vh;
 }
 
 .container {
@@ -82,11 +83,15 @@ body > h1 {
 div#server-address {
 	align-self: center;
 	text-align: center;
-	font-size: 1.5em;
+	font-size: 1.2rem;
 
 	padding: 12px;
 	width: 100%;
 	border-bottom: 2px var(--background-border-color) solid;
+}
+
+div#server-address p {
+	font-size: 1rem;
 }
 
 div#server-address code {
@@ -115,7 +120,6 @@ footer {
 	background: var(--background-color);
 
 	border-top: 1px var(--background-border-color) solid;
-	border-radius: 3px;
 
 	line-height: 1.5rem;
 }

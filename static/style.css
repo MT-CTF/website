@@ -11,6 +11,11 @@
 	--background-border-color2: #2d4d6bf8;
 }
 
+@font-face {
+	font-family: "SimpleSquare";
+	src: url("./ST_simple_square/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
+}
+
 body {
 	display: grid;
 	grid-template-columns: auto;
@@ -101,11 +106,6 @@ footer ul {
 
 footer ul li * {
 	display: inline;
-}
-
-@font-face {
-	font-family: "SimpleSquare";
-	src: url("./ST_simple_square/ST-SimpleSquare/ST-SimpleSquare.woff") format("woff");
 }
 
 h1,

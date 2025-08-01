@@ -61,7 +61,6 @@
 		(function updateElapsed() {
 			if ("current_map" in stats) {
 				time_elapsed = time_elapsed + 1;
-				console.log("Elapsed: " + time_elapsed);
 			}
 
 			old = setTimeout(() => {

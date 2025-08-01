@@ -36,8 +36,6 @@
 
 		let result = await fetch("/api/rankings/" + mode + "/player/" + player);
 
-		console.log("Loading for mode: " + mode + " place:" + place);
-
 		result = await result.json();
 
 		if (!result.player) {
@@ -125,7 +123,7 @@
 										}
 									}}
 								>
-									{#if (loaded[mode] === true || loaded[mode][place]) || currently_loading[mode] == place}
+									{#if loaded[mode] === true || loaded[mode][place] || currently_loading[mode] == place}
 										{@render rank_card(get_player_stats(player, place, mode), player, place)}
 									{:else}
 										<td>{place + 1} </td>
@@ -152,31 +150,27 @@
 	{/if}
 {/if}
 
-<style lang="scss">
+<style>
 	#tabs {
 		display: flex;
 		border-bottom: 1px var(--background-color2) solid;
-
-		p {
-			font-size: large;
-			order: 2;
-			margin-left: auto;
-		}
-
-		button.tab {
-			font-size: large;
-			color: var(--text-color);
-			border-radius: 0px;
-			background-color: var(--button-color);
-			border: 1px var(--background-color) solid;
-			font-style: inherit;
-
-			padding: 0px 12px;
-
-			&:hover,
-			&.selected {
-				background-color: var(--button-color-hover);
-			}
-		}
+	}
+	#tabs p {
+		font-size: large;
+		order: 2;
+		margin-left: auto;
+	}
+	#tabs button.tab {
+		font-size: large;
+		color: var(--text-color);
+		border-radius: 0px;
+		background-color: var(--button-color);
+		border: 1px var(--background-color) solid;
+		font-style: inherit;
+		padding: 0px 12px;
+	}
+	#tabs button.tab:hover,
+	#tabs button.tab.selected {
+		background-color: var(--button-color-hover);
 	}
 </style>

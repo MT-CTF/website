@@ -2,10 +2,8 @@
 	import MapInfo from "./mapinfo.svelte";
 </script>
 
-<main class="container content">
-	<h1 style="text-align: center;">
-		Capture the Flag game powered by the Minetest voxel engine
-	</h1>
+<div class="container content">
+	<h1 style="text-align: center;">Capture the Flag game powered by the Minetest voxel engine</h1>
 	<div id="server-address">
 		Address:
 		<code>ctf.rubenwardy.com</code>
@@ -15,39 +13,27 @@
 
 	<p class="links">
 		<a href="https://github.com/MT-CTF/capturetheflag">Source Code</a> |
-		<a href="https://github.com/MT-CTF/capturetheflag/issues"
-			>Issue Tracker</a
-		>
+		<a href="https://github.com/MT-CTF/capturetheflag/issues">Issue Tracker</a>
 		|
-		<a href="https://github.com/MT-CTF/capturetheflag/projects/2"
-			>Road Map</a
-		>
+		<a href="https://github.com/MT-CTF/capturetheflag/projects/2">Road Map</a>
 		|
-		<a href="https://forum.minetest.net/viewtopic.php?f=10&t=13157"
-			>Server Forum Topic</a
-		>
+		<a href="https://forum.minetest.net/viewtopic.php?f=10&t=13157">Server Forum Topic</a>
 	</p>
 
-	<div style="align-self: center;">
+	<div style="margin: 0px auto; width: fit-content;">
 		<a class="shield" href="https://discord.gg/vcZTRPX">
 			<img
 				alt="Discord"
 				src="https://img.shields.io/discord/447819017391046687?color=blue&label=Join%20the%20Discord&logo=discord&logoColor=blue"
 			/>
 		</a>
-		<a
-			class="shield"
-			href="https://content.minetest.net/packages/rubenwardy/capturetheflag/"
-		>
-			<img
-				alt="ContentDB"
-				src="https://content.minetest.net/packages/rubenwardy/capturetheflag/shields/downloads/"
-			/>
+		<a class="shield" href="https://content.minetest.net/packages/rubenwardy/capturetheflag/">
+			<img alt="ContentDB" src="https://content.minetest.net/packages/rubenwardy/capturetheflag/shields/downloads/" />
 		</a>
 	</div>
 
 	<MapInfo />
-</main>
+</div>
 
 <style>
 	div#server-address {

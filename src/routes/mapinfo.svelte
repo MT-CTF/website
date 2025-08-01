@@ -25,7 +25,7 @@
 						dotcount = 1;
 					} else ++dotcount;
 				},
-				(document.hidden ? 20 : 5) * 1000,
+				(document.hidden ? 20 : 5) * 1000
 			);
 		} else {
 			clearTimeout(rerun_id);
@@ -50,11 +50,7 @@
 
 	// https://stackoverflow.com/a/196991/11433667 CC BY-SA 4.0
 	function toTitleCase(str) {
-		return str.replace(
-			/\w\S*/g,
-			(text) =>
-				text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
-		);
+		return str.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
 	}
 
 	var time_elapsed = 0;
@@ -106,17 +102,11 @@
 	{:then status}
 		{#if status == 200 && "current_map" in stats}
 			{@const src =
-				"https://github.com/MT-CTF/maps/blob/master/" +
-				stats.current_map.technical_name +
-				"/screenshot.png?raw=true"}
-			{@const matchtime = new Date(
-				new Date().getTime() -
-					stats.current_map.start_time * 1000 +
-					time_elapsed,
-			)}
+				"https://github.com/MT-CTF/maps/blob/master/" + stats.current_map.technical_name + "/screenshot.png?raw=true"}
+			{@const matchtime = new Date(new Date().getTime() - stats.current_map.start_time * 1000 + time_elapsed)}
 			<h2 style="text-align: center;">
-				Current Mode: {toTitleCase(stats.current_mode.name)} | {stats
-					.current_mode.matches_played}/{stats.current_mode.matches} played
+				Current Mode: {toTitleCase(stats.current_mode.name)} | {stats.current_mode.matches_played}/{stats.current_mode
+					.matches} played
 			</h2>
 
 			<div id="map-info">
@@ -125,25 +115,13 @@
 						<h2>{stats.current_map.name}</h2>
 						<p>
 							<strong>Match Length:</strong>
-							{matchtime.getUTCHours() > 0
-								? String(matchtime.getUTCHours()).padStart(
-										2,
-										"0",
-									) + ":"
-								: ""}{String(
-								matchtime.getUTCMinutes(),
-							).padStart(
-								matchtime.getUTCHours() > 0 ? 2 : 1,
-								"0",
-							)}:{String(matchtime.getUTCSeconds()).padStart(
-								2,
-								"0",
-							)}
+							{matchtime.getUTCHours() > 0 ? String(matchtime.getUTCHours()).padStart(2, "0") + ":" : ""}{String(
+								matchtime.getUTCMinutes()
+							).padStart(matchtime.getUTCHours() > 0 ? 2 : 1, "0")}:{String(matchtime.getUTCSeconds()).padStart(2, "0")}
 							elapsed
 						</p>
 						<p>
-							<strong>Players ({stats.player_info.count}):</strong
-							>
+							<strong>Players ({stats.player_info.count}):</strong>
 							{#if stats.player_info.players}
 								{stats.player_info.players.join(", ")}
 							{/if}
@@ -154,14 +132,17 @@
 			</div>
 		{:else}
 			<p>
-				Loading Server Stats{".".repeat(dotcount)} (Waiting for server to
-				start)
+				Loading Server Stats{".".repeat(dotcount)} (Waiting for server to start)
 			</p>
 		{/if}
 	{/await}
 </div>
 
 <style>
+	p {
+		text-align: center;
+	}
+
 	#map-info {
 		margin-left: auto;
 		margin-right: auto;

@@ -9,8 +9,8 @@ import { handler } from './build/handler.js';
 
 /** @type {https.ServerOptions} */
 const httpsOptions = {
-	key: fs.readFileSync('./cert.key'),
-	cert: fs.readFileSync('./cert.crt'),
+	key: fs.readFileSync('./certs/fullchain.pem'),
+	cert: fs.readFileSync('./certs/privkey.pem'),
 };
 
 // Create the HTTPS server

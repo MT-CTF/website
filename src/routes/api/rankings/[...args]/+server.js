@@ -20,7 +20,7 @@ let statsPlayernames = undefined;
 
 let lastUpdated = 0;
 
-const redisClient = redis.createClient();
+const redisClient = redis.createClient({ socket: {host: "redis"} });
 
 async function getStats(mode, pname) {
 	let output = {

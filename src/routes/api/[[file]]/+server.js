@@ -18,10 +18,10 @@ export function GET({ url, getClientAddress, params }) {
 }
 
 export async function PUT({ url, request }) {
-	if (url.href === "https://luanti/api" && url.host === url.hostname === "localhost")
+	if (url.href === "https://luanti/api" && url.host === url.hostname === "localhost") {
 		console.log("401d put request: " + params + " from " + getClientAddress() + " hosts: " + url.host + " == " + url.hostname );
 		error(401, "You can only publish game data from localhost");
-	else {
+	} else {
 		let temp = await request.json();
 		data = null;
 		data = temp;

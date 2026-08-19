@@ -6,7 +6,7 @@ import fs from "fs";
 import fastifyView from "@fastify/view";
 import { Eta } from "eta";
 
-import { ctf_data } from "./src/ctfpipe.js";
+import { ctf_data, load_data } from "./src/ctfpipe.js";
 import { redis, leaderboards } from "./src/rankings.js"
 
 const DEV = process.env.DEV == "true";
@@ -86,6 +86,7 @@ fastify.get("/*", (req, reply) =>
 fastify.listen({ host: HOST, port: PORT }).then(() =>
 {
 	console.log("Website listening on host " + HOST + " at port " + PORT);
+	load_data();
 });
 
 fastify.addHook("onClose", function() {

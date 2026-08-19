@@ -5,8 +5,8 @@
 import { mkfifo } from "mkfifo";
 import fs from 'node:fs/promises';
 
-const CTFIN = "/tmp/ctf_in";  // To CTF
-const CTFOUT = "/tmp/ctf_out"; // From CTF
+const CTFIN = "/tmp/ctf_fifo/ctf_in";  // To CTF
+const CTFOUT = "/tmp/ctf_fifo/ctf_out"; // From CTF
 
 export var ctf_data; /* = {
 	"current_map" :
@@ -71,7 +71,7 @@ const errorout = await new Promise(function (resolve, reject)
 process_error(CTFIN, errorin);
 process_error(CTFOUT, errorout);
 
-async function load_data()
+export async function load_data()
 {
 	let new_data = await fs.readFile(CTFOUT, "utf-8", function (error)
 	{
@@ -90,7 +90,5 @@ async function load_data()
 
 	console.log(ctf_data);
 
-	load_data();
+	setTimeout(load_data, 30e3);
 }
-
-load_data();

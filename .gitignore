@@ -16,3 +16,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+public/output.css
+.dev.env
+fullchain.pem
+privkey.pem

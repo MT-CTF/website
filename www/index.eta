@@ -1,0 +1,126 @@
+<%
+let stats = it.stats;
+
+// https://stackoverflow.com/a/196991/11433667 CC BY-SA 4.0
+function toTitleCase(str) {
+	return str.replace(/\w\S*/g, (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase());
+}
+
+%>
+<div class="panel">
+	<h1 class="text-xl text-center font-bold mb-4">A game/server powered by Luanti (Minetest)</h1>
+	<div id="server-address" class="text-lg m-2"> Address: <code>ctf.landarvargan.xyz</code> Port: <code>30001</code>
+	</div>
+	<div class="w-fit mx-auto h-auto my-3">
+		<a class="shield" href="https://discord.gg/vcZTRPX">
+			<img alt="Discord" src="https://img.shields.io/discord/447819017391046687?color=blue&label=Join%20the%20Discord&logo=discord&logoColor=blue" />
+		</a>
+		<a class="shield" href="https://content.minetest.net/packages/rubenwardy/capturetheflag/">
+			<img alt="ContentDB" src="https://content.minetest.net/packages/rubenwardy/capturetheflag/shields/downloads/" />
+		</a>
+	</div>
+	<p class="pt-3 text-center">
+		<a href="https://github.com/MT-CTF/capturetheflag">Source Code</a> | <a href="https://github.com/MT-CTF/capturetheflag/issues">Issue Tracker</a> | <a href="https://forum.minetest.net/viewtopic.php?f=10&t=13157">Server Forum Topic</a>
+	</p>
+	<div id="MapInfo" class="w-fit max-w-full mx-auto px-2 pb-0 mt-3 pt-3">
+		<% if (stats) {
+			const src = "https://github.com/MT-CTF/maps/blob/master/" + stats?.current_map.technical_name + "/screenshot.png?raw=true";
+		%>
+			<div id="map-info" class="py-4">
+				<div class="relative max-w-full w-[800px] h-full min-h-[160px]">
+					<div id="map-overlay" class="p-2">
+						<table>
+							<tr>
+								<td>
+									<h2><%= stats.current_map.name %>&nbsp;-</h2>
+								</td>
+								<td class="pl-2 whitespace-nowrap">
+									<h2><%= toTitleCase(stats.current_mode.name) %></h2>
+								</td>
+							</tr>
+							<tr>
+								<th class="text-right">Match Length:</th>
+								<td class="pl-2 whitespace-nowrap"><span id="matchtime">00:00:00</span> elapsed</td>
+								<script>
+									function updateTime() {
+										let matchtime = new Date(new Date().getTime() - ( <%= stats.current_map.start_time %> ) * 1000);
+										let matchstr = matchtime.getUTCHours() > 0 ? String(matchtime.getUTCHours()).padStart(2, "0") + ":" : "";
+										matchstr += String(matchtime.getUTCMinutes()).padStart(matchtime.getUTCHours() > 0 ? 2 : 1, "0");
+										matchstr += ":" + String(matchtime.getUTCSeconds()).padStart(2, "0");
+										document.getElementById("matchtime").innerText = matchstr;
+									}
+									updateTime();
+									setInterval(updateTime, 1e3);
+								</script>
+							</tr>
+							<tr>
+								<th class="text-right">Matches:</th>
+								<td class="pl-2 whitespace-nowrap"><%= stats.current_mode.matches_played + "/" + stats.current_mode.matches %> played</td>
+							</tr>
+							<tr>
+								<th class="text-right">Players (<%= stats.player_info.count %>):</th>
+								<td class="pl-2 whitespace-nowrap">
+									<%= stats.player_info.players.join(", ") %>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<img src="<%= src %>" class="max-w-[800px] w-full brightness-[90%]" alt="<%= stats.current_map.name %>" />
+				</div>
+				<% if (stats.last_fetch) {
+					const last_updated = new Date(stats.last_fetch * 1e3);
+				%>
+					<p class="text-sm">Last updated: <%= last_updated.toLocaleTimeString() %></p>
+				<% } %>
+			</div>
+		<% } else { %>
+		<p class="text-center">The server is not sending game info right now, it may be offline</p>
+		<% } %>
+	</div>
+</div>
+<style>
+	code {
+		padding: 2px 4px;
+	}
+
+	#map-info #map-overlay {
+		position: absolute;
+		display: block;
+		width: 100%;
+		z-index: 1;
+		background-color: rgba(0, 0, 0, 0.76);
+	}
+
+	#map-overlay h2 {
+		font-family: "SimpleSquare", sans-serif;
+		text-shadow: black 2px 2px;
+		font-size: 25px;
+	}
+
+	h2>* {
+		font-family: "Arimo", sans-serif;
+	}
+
+	#map-overlay p {
+		margin-left: 24px;
+		margin-right: 24px;
+		text-shadow: black 1px 1px;
+	}
+
+	div#server-address {
+		align-self: center;
+		text-align: center;
+		padding: 0px;
+		width: 100%;
+	}
+
+	#MapInfo {
+		width: calc(100% - 24px);
+		border-top: 3px var(--background-border-color) solid;
+	}
+
+	div#server-address code {
+		display: inline-block;
+		user-select: all;
+	}
+</style>

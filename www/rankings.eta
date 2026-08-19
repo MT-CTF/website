@@ -1,0 +1,119 @@
+<%
+	const redisSTATKEYS = [
+		"score",
+		"kills",
+		"deaths",
+		"kill_assists",
+		"bounty_kills",
+		"flag_captures",
+		"flag_attempts",
+		"hp_healed",
+		"reward_given_to_enemy",
+	];
+
+	const MODES = Object.keys(it.leaderboards);
+
+	/**
+	 * Return a humanreadable name from a technical name
+	 *
+	 * eg: `nade_fight` -> `Nade Fight`
+	 */
+	function technicalToName(technical_name) {
+		if (technical_name.substring(0, 9) == "ctf_mode_") technical_name = technical_name.substring(9);
+
+		return technical_name
+			.split("_")
+			.map((word) => {
+				return word[0].toUpperCase() + word.substring(1);
+			})
+			.join(" ");
+	}
+
+
+
+	let selected_mode = ("select_mode" in it.query) ? MODES.indexOf(it.query.select_mode) : -1;
+
+	if (selected_mode !== -1)
+		selected_mode = MODES[selected_mode];
+	else
+		selected_mode = MODES[0];
+%>
+
+<% if (it.leaderboards) { %>
+	<div class="panel">
+		<form method="get">
+			<nav id="tabs">
+				<% for (const mode of MODES) { %>
+					<button type="submit" name="select_mode" value="<%= mode %>" class="tab <%= mode === selected_mode ? 'selected' : '' %>"><%= technicalToName(mode) %></button>
+				<% } %>
+				<% /* <p>
+					Year: <input type="number" min="2025" max="2025" name="ranking_year" value="2025" />
+				</p> */ %>
+			</nav>
+		</form>
+
+		<% for (const mode of MODES) { %>
+			<% if (mode === selected_mode) { %>
+				<div id="<%= mode %>" class="ranklist h-[70vh] pr-4">
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Playername</th>
+								<% for (const key of redisSTATKEYS) { %>
+									<th><%= technicalToName(key) %></th>
+								<% } %>
+							</tr>
+						</thead>
+						<tbody>
+							<% if (it.leaderboards[selected_mode].length > 0) { %>
+								<% for (const stats of it.leaderboards[selected_mode]) { %>
+									<tr class="rankcard">
+										<td><%= stats.place %></td>
+										<td>
+											<%= stats.name %>
+										</td>
+										<% for (const key of redisSTATKEYS) { %>
+											<td title="<%= technicalToName(key) %>"><%= Math.round(stats[key]) %></td>
+										<% } %>
+									</tr>
+								<% } %>
+							<% } else { %>
+								<tr><td colspan="<%= 2 + redisSTATKEYS.length %>"><p class="text-center">No data for this mode</p></td></tr>
+							<% } %>
+						</tbody>
+					</table>
+				</div>
+			<% } %>
+		<% } %>
+	</div>
+<% } else { %>
+	<p>
+		The rankings database is currently down. Check back later
+	</p>
+<% } %>
+
+<style>
+	#tabs {
+		display: flex;
+		border-bottom: 1px var(--background-color2) solid;
+	}
+	#tabs p {
+		font-size: large;
+		order: 2;
+		margin-left: auto;
+	}
+	#tabs button.tab {
+		font-size: large;
+		color: var(--text-color);
+		border-radius: 0px;
+		background-color: var(--button-color);
+		border: 1px var(--background-color) solid;
+		font-style: inherit;
+		padding: 6px;
+	}
+	#tabs button.tab:hover,
+	#tabs button.tab.selected {
+		background-color: var(--button-color-hover);
+	}
+</style>

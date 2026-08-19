@@ -1,58 +1,93 @@
-// Credit to https://stackoverflow.com/a/77872825/11433667
 
-import fs from 'fs';
-import http from 'http';
-import https from 'https';
-import { parse } from 'url';
+import Fastify from "fastify";
+import fastifyStatic from "@fastify/static";
+import path from "node:path";
+import fs from "fs";
+import fastifyView from "@fastify/view";
+import { Eta } from "eta";
 
-import { handler } from './build/handler.js';
+import { ctf_data } from "./src/ctfpipe.js";
+import { redis, leaderboards } from "./src/rankings.js"
 
-/** @type {https.ServerOptions} */
-const httpsOptions = {
-	key: fs.readFileSync('../certs/privkey.pem'),
-	cert: fs.readFileSync('../certs/fullchain.pem'),
-};
+const DEV = process.env.DEV == "true";
+const CERT_PATH = process.env.CERT_PATH; // e.g: /etc/letsencrypt/live/ctf.landarvargan.xyz/
 
-// Create the HTTPS server
-const httpsServer = https.createServer(httpsOptions, (req, res) => {
-	const parsedUrl = parse(req.url, true);
+const HOST = DEV ? "localhost" : "0.0.0.0";
+const PORT = DEV ? 8080 : 443;
 
-	// Check if the request is for the health check
-	if (parsedUrl.pathname === '/healthcheck') {
-		res.writeHead(200, { 'Content-Type': 'text/plain' });
-		res.end('ok');
-	} else {
-		// Let SvelteKit handle all other requests
-		handler(req, res);
+if (!DEV && !CERT_PATH)
+{
+	throw new Error("CERT_PATH env var not provided!")
+}
+
+const fastify = new Fastify({
+	http2: DEV ? undefined : true, // Used for http redirect plugin
+	https: DEV ? undefined : {
+		allowHTTP1: true, // Used for http redirect plugin
+		key: fs.readFileSync(path.resolve(CERT_PATH, "privkey.pem")),
+		cert: fs.readFileSync(path.resolve(CERT_PATH, "fullchain.pem")),
 	}
 });
 
-const httpsPort = 443;
-httpsServer.listen(httpsPort, () => {
-	console.log(`HTTPS server listening on port ${httpsPort}`);
+const eta = new Eta();
+
+await fastify.register(fastifyStatic, {
+	root: path.join(import.meta.dirname, "public"),
+	prefix: "/public/"
 });
 
-// Create an HTTP server that redirects all traffic to HTTPS
-const httpServer = http.createServer((req, res) => {
-	const parsedUrl = parse(req.url, true);
+const files = fs.readdirSync(path.join(import.meta.dirname, "www"), { withFileTypes: true }).filter(function (file)
+{
+	return path.basename(file.name) !== "layout.eta" && path.extname(file.name) === ".eta";
+}).map(file => file.name);
 
-	// Check if the request is for the health check
-	if (parsedUrl.pathname === '/healthcheck') {
-		res.writeHead(200, { 'Content-Type': 'text/plain' });
-		res.end('ok');
-	} else {
-		// Let SvelteKit handle all other requests
-		handler(req, res);
+console.log("Files: ", files);
+
+await fastify.register(fastifyView, {
+	engine: { eta },
+	production: true,
+	templates: import.meta.dirname,
+});
+
+fastify.get("/*", (req, reply) =>
+{
+	let requested_page = String(req.params["*"]);
+
+	if (requested_page === "")
+		requested_page = "index.eta";
+	else if (path.extname(requested_page) === "")
+		requested_page += ".eta";
+
+	console.log("Loading page:", requested_page);
+
+	const requested_idx = files.indexOf(requested_page);
+	if (requested_idx != -1)
+	{
+		const data = {
+			stats: ctf_data,
+			leaderboards: leaderboards,
+			query: req.query,
+			current_page: files[requested_idx],
+		};
+
+		return reply.viewAsync(
+			path.join("www", files[requested_idx]),
+			data,
+			{ layout: "www/layout.eta" }
+		);
 	}
-
-	// filter out port from req.headers.host
-	// const host = req.headers.host.split(':')[0];
-	// const httpsRedirectUrl = `https://${host}:${httpsPort}${req.url}`;
-	// res.writeHead(301, { Location: httpsRedirectUrl });
-	// res.end();
+	else
+	{
+		reply.statusCode = 404;
+		reply.send("Page not found");
+	}
 });
 
-const redirectPort = 80;
-httpServer.listen(redirectPort, () => {
-	console.log(`HTTP server listening on port ${redirectPort} and redirecting to HTTPS`);
+fastify.listen({ host: HOST, port: PORT }).then(() =>
+{
+	console.log("Website listening on host " + HOST + " at port " + PORT);
 });
+
+fastify.addHook("onClose", function() {
+	redis.quit();
+})

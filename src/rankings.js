@@ -20,7 +20,7 @@ const redisSTATKEYS = [
 ];
 
 export const redis = new Redis({
-	host: "127.0.0.1",
+	host: process.env.REDIS_HOST || "127.0.0.1",
 	retryStrategy(times)
 	{
 		const delay = Math.min(times * 10e3, 60e3);

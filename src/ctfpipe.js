@@ -73,6 +73,7 @@ process_error(CTFOUT, errorout);
 
 export async function load_data()
 {
+	console.log("[load_data] Fetching data from " + CTFOUT + "...")
 	let new_data = await fs.readFile(CTFOUT, "utf-8", function (error)
 	{
 		if (error)
@@ -82,13 +83,12 @@ export async function load_data()
 	try
 	{
 		ctf_data = JSON.parse(new_data);
-		data["_last_fetch"] = Date.now();
+		ctf_data["_last_fetch"] = Date.now();
+		console.log(ctf_data);
 	} catch (error)
 	{
 		console.log("Failed to parse data from server:", new_data);
 	}
-
-	console.log(ctf_data);
 
 	setTimeout(load_data, 30e3);
 }

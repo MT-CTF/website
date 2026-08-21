@@ -6,8 +6,8 @@ import fs from "fs";
 import fastifyView from "@fastify/view";
 import { Eta } from "eta";
 
-import { ctf_data, load_data } from "./src/ctfpipe.js";
-import { redis, leaderboards } from "./src/rankings.js"
+import { ctf_data, init_ctfpipe, close_ctfpipe } from "./src/ctfpipe.js";
+import { redis, leaderboards } from "./src/rankings.js";
 
 const DEV = process.env.DEV == "true";
 const CERT_PATH = process.env.CERT_PATH; // e.g: /etc/letsencrypt/live/ctf.landarvargan.xyz/
@@ -17,7 +17,7 @@ const PORT = DEV ? 8080 : 443;
 
 if (!DEV && !CERT_PATH)
 {
-	throw new Error("CERT_PATH env var not provided!")
+	throw new Error("CERT_PATH env var not provided!");
 }
 
 const fastify = new Fastify({
@@ -86,9 +86,21 @@ fastify.get("/*", (req, reply) =>
 fastify.listen({ host: HOST, port: PORT }).then(() =>
 {
 	console.log("Website listening on host " + HOST + " at port " + PORT);
-	load_data();
+	init_ctfpipe();
 });
 
-fastify.addHook("onClose", function() {
+fastify.addHook("onClose", function ()
+{
 	redis.quit();
-})
+	close_ctfpipe();
+});
+
+process.on('SIGINT', async () => {
+  await fastify.close();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  await fastify.close();
+  process.exit(0);
+});

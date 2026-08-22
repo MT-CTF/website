@@ -58,7 +58,7 @@ function process_error(pipe, err)
 
 const errorin = await new Promise(function (resolve, reject)
 {
-	mkfifo(CTFIN, 0o664, function (mkfifoerror)
+	mkfifo(CTFIN, 0o777, function (mkfifoerror)
 	{
 		resolve(mkfifoerror);
 	});
@@ -68,7 +68,7 @@ const errorin = await new Promise(function (resolve, reject)
 
 const errorout = await new Promise(function (resolve, reject)
 {
-	mkfifo(CTFOUT, 0o664, function (mkfifoerror)
+	mkfifo(CTFOUT, 0o777, function (mkfifoerror)
 	{
 		resolve(mkfifoerror);
 	});

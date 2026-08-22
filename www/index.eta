@@ -61,7 +61,7 @@ function toTitleCase(str) {
 								<% if (stats.player_info && stats.player_info.count > 0) { %>
 									<th class="text-right">Players (<%= stats.player_info.count %>):</th>
 									<td class="pl-2 whitespace-nowrap">
-										<%= stats.player_info.players.join(", ") %>
+										<%= stats.player_info.players?.join(", ") %>
 									</td>
 								<% } else { %>
 									<th class="text-right">Players:</th>

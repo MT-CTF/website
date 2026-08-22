@@ -31,15 +31,12 @@ function toTitleCase(str) {
 					<div id="map-overlay" class="p-2">
 						<table>
 							<tr>
-								<td>
-									<h2><%= stats.current_map.name %>&nbsp;-</h2>
-								</td>
-								<td class="pl-2 whitespace-nowrap">
-									<h2><%= toTitleCase(stats.current_mode.name) %></h2>
+								<td colspan="2" class="whitespace-nowrap">
+									<h2><%= stats.current_map.name %>&nbsp;-&nbsp;toTitleCase(stats.current_mode.name)</h2>
 								</td>
 							</tr>
 							<tr>
-								<th class="text-right">Match Length:</th>
+								<th class="text-right whitespace-nowrap">Match Length:</th>
 								<td class="pl-2 whitespace-nowrap"><span id="matchtime">00:00:00</span> elapsed</td>
 								<script>
 									function updateTime() {
@@ -54,18 +51,18 @@ function toTitleCase(str) {
 								</script>
 							</tr>
 							<tr>
-								<th class="text-right">Matches:</th>
+								<th class="text-right whitespace-nowrap">Matches:</th>
 								<td class="pl-2 whitespace-nowrap"><%= stats.current_mode.matches_played + "/" + stats.current_mode.matches %> played</td>
 							</tr>
 							<tr>
 								<% if (stats.player_info && stats.player_info.count > 0) { %>
-									<th class="text-right">Players (<%= stats.player_info.count %>):</th>
-									<td class="pl-2 whitespace-nowrap">
+									<th class="text-right whitespace-nowrap">Players (<%= stats.player_info.count %>):</th>
+									<td class="pl-2">
 										<%= stats.player_info.players?.join(", ") %>
 									</td>
 								<% } else { %>
-									<th class="text-right">Players:</th>
-									<td class="pl-2 whitespace-nowrap"></td>
+									<th class="text-right whitespace-nowrap align-top">Players:</th>
+									<td class="pl-2"></td>
 								<% } %>
 							</tr>
 						</table>

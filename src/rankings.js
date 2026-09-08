@@ -82,7 +82,7 @@ async function getStats(modename, pname)
 
 
 // Should be called whenever the match changes
-const MAX_RANKINGS = 500;
+const MAX_RANKINGS = 100;
 async function update_leaderboards()
 {
 	console.log("Loading rankings...");

@@ -23,16 +23,17 @@ function toTitleCase(str) {
 		<a href="https://github.com/MT-CTF/capturetheflag">Source Code</a> | <a href="https://github.com/MT-CTF/capturetheflag/issues">Issue Tracker</a> | <a href="https://forum.minetest.net/viewtopic.php?f=10&t=13157">Server Forum Topic</a>
 	</p>
 	<div id="MapInfo" class="w-fit max-w-full mx-auto px-2 pb-0 mt-3 pt-3">
-		<% if (stats) {
-			const src = "https://github.com/MT-CTF/maps/blob/master/" + stats?.current_map.technical_name + "/screenshot.png?raw=true";
+		<% if (stats && stats.current_map && stats.current_mode) {
+			const src = "https://github.com/MT-CTF/maps/blob/master/" + stats.current_map.technical_name + "/screenshot.png?raw=true";
 		%>
 			<div id="map-info" class="py-4">
 				<div class="relative max-w-full w-[800px] h-full min-h-[160px]">
 					<div id="map-overlay" class="p-2">
 						<table>
 							<tr>
-								<td colspan="2" class="whitespace-nowrap">
-									<h2><%= stats.current_map.name %>&nbsp;-&nbsp;toTitleCase(stats.current_mode.name)</h2>
+								<td></td>
+								<td class="whitespace-nowrap">
+									<h2><%= stats.current_map.name %>&nbsp;-&nbsp;<%= toTitleCase(stats.current_mode.name) %></h2>
 								</td>
 							</tr>
 							<tr>
@@ -67,7 +68,7 @@ function toTitleCase(str) {
 							</tr>
 						</table>
 					</div>
-					<img src="<%= src %>" class="max-w-[800px] w-full brightness-[90%]" alt="<%= stats.current_map.name %>" />
+					<img fetchpriority="low" src="<%= src %>" class="max-w-[800px] w-full brightness-[90%]" alt="<%= stats.current_map.name %>" />
 				</div>
 				<% if (stats.last_fetch) {
 					const last_updated = new Date(stats.last_fetch * 1e3);

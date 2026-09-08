@@ -16,11 +16,13 @@
 			<img id="header-image"
 				style="max-width: 453px; width: 100%; height: auto;"
 				alt="Capture The Flag"
+				fetchpriority="low"
 				src="https://github.com/MT-CTF/capturetheflag/blob/master/menu/header.png?raw=true"
 			/>
 			<img id="header-icon"
 				style="max-width: 52px; max-height: 90%; width: 100%; height: auto;"
 				alt="CTF"
+				fetchpriority="low"
 				src="https://github.com/MT-CTF/capturetheflag/blob/master/menu/icon.png?raw=true"
 			/>
 		</a>
